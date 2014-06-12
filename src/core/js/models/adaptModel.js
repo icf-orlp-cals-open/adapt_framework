@@ -35,13 +35,15 @@ define(function (require) {
         initialize: function () {
             // Reset this.lockedAttributes on every model initialize
             this.lockedAttributes = {
+                _canShowFeedback: {},
+                _isEnabledOnRevisit: {},
                 _isAvailable: {}, 
                 _isOptional: {}, 
                 _isTrackable: {}, 
                 _isVisible: {}
             };
-            // Wait until data is ready before setting up model
-            Adapt.once('app:dataReady', this.setupModel, this);
+            // Wait until data is loaded before setting up model
+            Adapt.once('app:dataLoaded', this.setupModel, this);
 
         },
 
