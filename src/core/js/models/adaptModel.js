@@ -16,6 +16,7 @@ define(function (require) {
             _isComplete: false,
             _isEnabled: true,
             _isResetOnRevisit: false,
+            _isHardReset:true,
             _isAvailable: true,
             _isOptional: false,
             _isTrackable: true,
@@ -26,6 +27,7 @@ define(function (require) {
         lockedAttributes: {
             _canShowFeedback: {},
             _isResetOnRevisit: {},
+            _isHardReset: {},
             _isAvailable: {}, 
             _isOptional: {}, 
             _isTrackable: {}, 
@@ -35,6 +37,9 @@ define(function (require) {
         initialize: function () {
             // Reset this.lockedAttributes on every model initialize
             this.lockedAttributes = {
+                _canShowFeedback: {},
+                _isResetOnRevisit: {},
+                _isHardReset: {},
                 _isAvailable: {}, 
                 _isOptional: {}, 
                 _isTrackable: {}, 
@@ -46,19 +51,31 @@ define(function (require) {
         },
 
         setupModel: function() {
+
+            // If this model is a page then it's child must be an article
             if (this.get('_type') === 'page') {
                 this._children = 'articles';
             }
+
+            // If this model is a contentObject and is a child of another contentObject
+            // set parent as contentObject - enables contentObjects to sit under contentObjects
             if (this._siblings === 'contentObjects' && this.get('_parentId') !== Adapt.course.get('_id')) {
                 this._parent = 'contentObjects';
             }
+            
+            this.setupChildListeners();
+            this.init();
+
+        },
+
+        setupChildListeners: function() {
+            // Check if model has children and setup child listeners for completion and ready
             if (this._children) {
-                Adapt[this._children].on({
-                    "change:_isReady": this.checkReadyStatus,
-                    "change:_isComplete": this.checkCompletionStatus
+                this.getChildren().each(function(childModel) {
+                    this.listenTo(childModel, 'change:_isReady', this.checkReadyStatus);
+                    this.listenTo(childModel, 'change:_isComplete', this.checkCompletionStatus);
                 }, this);
             }
-            this.init();
         },
 
         init: function() {},

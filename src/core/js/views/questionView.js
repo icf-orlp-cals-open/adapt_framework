@@ -286,18 +286,8 @@ define(function(require) {
         // Checks if the question should be set to complete
         // Calls setCompletionStatus and adds complete classes
         checkQuestionCompletion: function() {
-
-            var isComplete = false;
             
-            if (this.model.get('_isCorrect')) {
-                isComplete = true;
-            } else {
-                if (this.model.get('_attemptsLeft') === 0) {
-                    isComplete = true;
-                }
-            }
-
-            if (isComplete) {
+            if (this.model.get('_isCorrect') || this.model.get('_attemptsLeft') === 0) {
                 this.setCompletionStatus();
                 this.$('.component-widget').addClass('complete show-user-answer');
             }
