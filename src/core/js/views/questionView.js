@@ -69,15 +69,25 @@ define(function(require) {
             // If reset is enabled set defaults
             // Call blank method for question to handle
             if (isResetOnRevisit) {
+                
                 var attempts = this.model.get('_attempts');
+                // Check if model should soft or hard reset
+                // This involves setting _isComplete to either true or false
+                var shouldSetModelAsComplete = false;
+                
+                if (!this.model.get('_isHardReset')) {
+                    shouldSetModelAsComplete = true;
+                }
+
                 this.model.set({
                     _isEnabled: true,
                     _attemptsLeft: attempts,
                     _isCorrect: false,
-                    _isComplete: false,
+                    _isComplete: shouldSetModelAsComplete,
                     _isSubmitted: false,
                     _buttonState: 'submit'
                 });
+
                 // Defer is added to allow the component to render
                 _.defer(_.bind(function() {
                     this.resetQuestionOnRevisit();
