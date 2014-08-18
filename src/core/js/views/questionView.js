@@ -66,54 +66,63 @@ define(function(require) {
 
             var isResetOnRevisit = this.model.get('_isResetOnRevisit');
 
-            // If reset is enabled set defaults
-            // Call blank method for question to handle
             if (isResetOnRevisit) {
-                
-                var attempts = this.model.get('_attempts');
-                // Check if model should soft or hard reset
-                // This involves setting _isComplete to either true or false
-                var shouldSetModelAsComplete = false;
-                
-                if (!this.model.get('_isHardReset')) {
-                    shouldSetModelAsComplete = true;
-                }
+                this.resetStateOnRevisit();
+            } else {
+                this.retainStateOnRevisit();
+            }
 
-                this.model.set({
-                    _isEnabled: true,
-                    _attemptsLeft: attempts,
-                    _isCorrect: false,
-                    _isComplete: shouldSetModelAsComplete,
-                    _isSubmitted: false,
-                    _buttonState: 'submit'
-                });
+        },
 
+        // If reset is enabled set defaults
+        // Call blank method for question to handle
+        resetStateOnRevisit: function() {
+            
+            var attempts = this.model.get('_attempts');
+            // Check if model should soft or hard reset
+            // This involves setting _isComplete to either true or false
+            var shouldSetModelAsComplete = false;
+            
+            if (!this.model.get('_isHardReset')) {
+                shouldSetModelAsComplete = true;
+            }
+
+            this.model.set({
+                _isEnabled: true,
+                _attemptsLeft: attempts,
+                _isCorrect: false,
+                _isComplete: shouldSetModelAsComplete,
+                _isSubmitted: false,
+                _buttonState: 'submit'
+            });
+
+            // Defer is added to allow the component to render
+            _.defer(_.bind(function() {
+                this.resetQuestionOnRevisit();
+            }, this));
+
+        },
+
+        retainStateOnRevisit: function() {
+            // If complete - display users answer
+            // or reset the question if not complete
+            var isComplete = this.model.get('_isComplete');
+
+            if (isComplete) {
+
+                this.model.set('_buttonState', 'hideCorrectAnswer');
                 // Defer is added to allow the component to render
                 _.defer(_.bind(function() {
-                    this.resetQuestionOnRevisit();
+                    this.onHideCorrectAnswerClicked(); 
                 }, this));
-
+                
             } else {
 
-                // If complete - display users answer
-                // or reset the question if not complete
-                var isComplete = this.model.get('_isComplete');
-
-                if (isComplete) {
-                    this.model.set('_buttonState', 'hideCorrectAnswer');
-                    // Defer is added to allow the component to render
-                    _.defer(_.bind(function() {
-                        this.onHideCorrectAnswerClicked(); 
-                    }, this));
-                    
-                } else {
-                    this.model.set('_buttonState', 'submit');
-                    // Defer is added to allow the component to render
-                    _.defer(_.bind(function() {
-                        this.onResetClicked();
-                    }, this));
-                }
-
+                this.model.set('_buttonState', 'submit');
+                // Defer is added to allow the component to render
+                _.defer(_.bind(function() {
+                    this.onResetClicked();
+                }, this));
             }
 
         },
