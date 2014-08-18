@@ -83,7 +83,7 @@ define(function(require) {
             // This involves setting _isComplete to either true or false
             var shouldSetModelAsComplete = false;
             
-            if (!this.model.get('_isHardReset')) {
+            if (!this.model.get('_isHardReset') && this.model.get('_isComplete')) {
                 shouldSetModelAsComplete = true;
             }
 
@@ -93,7 +93,8 @@ define(function(require) {
                 _isCorrect: false,
                 _isComplete: shouldSetModelAsComplete,
                 _isSubmitted: false,
-                _buttonState: 'submit'
+                _buttonState: 'submit',
+                feedbackMessage: null
             });
 
             // Defer is added to allow the component to render
