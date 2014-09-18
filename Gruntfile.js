@@ -90,8 +90,8 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['src/extensions/adapt-contrib-spoor/required/*'],
-                        dest: 'build/',
+                        src: ['src/extensions/**/assets/**'],
+                        dest: 'build/assets/',
                         filter: 'isFile'
                     }
                 ]
@@ -240,7 +240,8 @@ module.exports = function(grunt) {
                 files: [
                     'src/theme/**/fonts/**',
                     'src/theme/**/assets/**',
-                    'src/components/**/assets/**'
+                    'src/components/**/assets/**',
+                    'src/extensions/**/assets/**'
                 ],
                 tasks: ['copy:main']
             }
