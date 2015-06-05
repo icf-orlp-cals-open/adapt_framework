@@ -43,6 +43,13 @@ define(function(require) {
 			this._hasBackButton = hasBackButton;
 			this._isCustomViewVisible = true;
 			Adapt.trigger('drawer:empty');
+			//we should be able to toggle the drawer by click on on the custom view button again
+			if (this._isVisible){
+				this._isVisible = false;
+				this.hideDrawer();
+				return;
+			}
+			this._isVisible = true;
 			this.showDrawer();
 			this.$('.drawer-holder').html(view);
 			

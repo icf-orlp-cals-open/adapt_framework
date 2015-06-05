@@ -19,7 +19,9 @@ define(function(require) {
     		return 'menu ' 
             + 'menu-' 
             + this.model.get('_id')
-            + " " + this.setVisibility();
+            + " " + this.setVisibility()
+            + " " + this.model.get('_classes');
+
     	},
 
         preRender: function() {
