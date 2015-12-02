@@ -25,7 +25,6 @@ define(function(require) {
         },
         
         isReady: function() {
-            $('.loading').show(); //js - fixed issue with loading screen not displayin on page if menu was previous view
             if (this.model.get('_isReady')) {
                 _.defer(_.bind(function() {
                     $('.loading').hide();

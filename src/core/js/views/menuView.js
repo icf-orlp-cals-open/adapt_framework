@@ -35,7 +35,7 @@ define(function(require) {
         isReady: function() {
             if (this.model.get('_isReady')) {
                 _.defer(_.bind(function() {
-                    $('.loading').hide();
+                    //$('.loading').hide(); -- temp fix
                     $(window).scrollTop(0);
                     Adapt.trigger('menuView:ready', this);
                     this.$el.velocity({'opacity': 1}, 'fast');
